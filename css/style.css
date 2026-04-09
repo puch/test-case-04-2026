@@ -86,4 +86,37 @@ body {
 
 body {
   background-color: #343a40;
+}
+
+.videos {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.videos::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+.videos__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  font-size: 200px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.videos__item:nth-child(odd) {
+  background-color: rgba(255, 0, 120, 0.3);
+}
+.videos__item:nth-child(even) {
+  background-color: rgba(0, 255, 120, 0.3);
+}
+.videos__item video {
+  height: 100vh;
 }/*# sourceMappingURL=style.css.map */

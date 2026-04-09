@@ -11,3 +11,41 @@ body {
 body {
     background-color: $dark-color;
 }
+
+.videos {
+    width: 100vw;
+    height: 100vh;
+    overflow-y: scroll; 
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE и Edge
+    
+    &::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        background: transparent;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        font-size: 200px;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+
+        &:nth-child(odd) {
+            background-color: rgba(255, 0, 120, 0.3);
+        }
+
+        &:nth-child(even) {
+            background-color: rgba(0, 255, 120, 0.3);
+        }
+
+        video {
+            height: 100vh;
+        }
+    }
+}
