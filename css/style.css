@@ -85,7 +85,7 @@ body {
 }
 
 body {
-  background-color: #343a40;
+  background-color: #222;
 }
 
 .videos {
@@ -113,4 +113,11 @@ body {
 }
 .videos__item video {
   height: 100vh;
+}
+@media all and (max-width: 767px) {
+  .videos__item video {
+    width: 100vw;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
 }/*# sourceMappingURL=style.css.map */

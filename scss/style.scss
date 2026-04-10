@@ -18,7 +18,7 @@ body {
     overflow-y: scroll; 
     scroll-snap-type: y mandatory;
     scrollbar-width: none; // Firefox
-    -ms-overflow-style: none; // IE и Edge
+    -ms-overflow-style: none; // IE and Edge
     
     &::-webkit-scrollbar {
         display: none;
@@ -36,16 +36,13 @@ body {
         scroll-snap-align: start;
         scroll-snap-stop: always;
 
-        // &:nth-child(odd) {
-        //     background-color: rgba(255, 0, 120, 0.3);
-        // }
-
-        // &:nth-child(even) {
-        //     background-color: rgba(0, 255, 120, 0.3);
-        // }
-
         video {
             height: 100vh;
+
+            @media all and (max-width: $breakpoint-mobile) {
+                width: 100vw;
+                object-fit: cover;
+            }
         }
     }
 }
