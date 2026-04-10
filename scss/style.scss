@@ -36,13 +36,13 @@ body {
         scroll-snap-align: start;
         scroll-snap-stop: always;
 
-        &:nth-child(odd) {
-            background-color: rgba(255, 0, 120, 0.3);
-        }
+        // &:nth-child(odd) {
+        //     background-color: rgba(255, 0, 120, 0.3);
+        // }
 
-        &:nth-child(even) {
-            background-color: rgba(0, 255, 120, 0.3);
-        }
+        // &:nth-child(even) {
+        //     background-color: rgba(0, 255, 120, 0.3);
+        // }
 
         video {
             height: 100vh;

@@ -111,12 +111,6 @@ body {
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
-.videos__item:nth-child(odd) {
-  background-color: rgba(255, 0, 120, 0.3);
-}
-.videos__item:nth-child(even) {
-  background-color: rgba(0, 255, 120, 0.3);
-}
 .videos__item video {
   height: 100vh;
 }/*# sourceMappingURL=style.css.map */
