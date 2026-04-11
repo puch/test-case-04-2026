@@ -86,12 +86,21 @@ function getVideoUrl(index) {
     return `videos/${index + 1}.MP4`;
 }
 
-// Load video to the existing container
-async function loadVideoIntoContainer(containerElement) {
-    containerElement.innerHTML = '';
-    
-    const index = parseInt(containerElement.dataset.index);
+// Update progress bar
+function updateProgressBar(video, progressFill) {
+    if (video.duration && !isNaN(video.duration)) {
+        const percent = (video.currentTime / video.duration) * 100;
+        progressFill.style.width = `${percent}%`;
+    }
+}
 
+// Load video to the existing container
+async function loadVideoIntoContainer(wrapperElement) {
+    wrapperElement.innerHTML = '';
+    
+    const index = parseInt(wrapperElement.closest('.videos__item').dataset.index);
+
+    // el → <video>
     const video = document.createElement('video');
     video.loop = true;
     video.playsInline = true;
@@ -99,17 +108,43 @@ async function loadVideoIntoContainer(containerElement) {
     video.muted = true;
     video.poster = `videos/${index + 1}.webp`;
     
+    // el → <video> → <source>
     const source = document.createElement('source');
     source.src = getVideoUrl(index);
     source.type = 'video/mp4';
     
     video.appendChild(source);
-    containerElement.appendChild(video);
+    wrapperElement.appendChild(video);
     
-    // Add state indicator
+    // Add state indicator el → <div class="video__item__state-indicator">
     const indicator = document.createElement('div');
     indicator.className = 'videos__item__state-indicator';
-    containerElement.appendChild(indicator);
+    wrapperElement.appendChild(indicator);
+    
+    // Add progress bar el → <div class="videos__item__progress-bar">
+    const progressBar = document.createElement('div');
+    progressBar.className = 'videos__item__progress-bar';
+    const progressFill = document.createElement('div');
+    progressFill.className = 'videos__item__progress-bar__fill';
+    progressBar.appendChild(progressFill);
+    wrapperElement.appendChild(progressBar);
+    
+    // Update progress bar during video playback
+    video.addEventListener('timeupdate', () => {
+        updateProgressBar(video, progressFill);
+    });
+    
+    // Update progress bar when video metadata is loaded
+    video.addEventListener('loadedmetadata', () => {
+        updateProgressBar(video, progressFill);
+    });
+    
+    // Reset progress bar when video ends (for loop)
+    video.addEventListener('ended', () => {
+        if (video.loop) {
+            updateProgressBar(video, progressFill);
+        }
+    });
     
     // Play/pause on click, and show the pause indicator
     video.addEventListener('click', (e) => {
@@ -149,6 +184,12 @@ function createItem(index) {
         const div = document.createElement('div');
         div.className = 'videos__item';
         div.dataset.index = index;
+        
+        // Wrapper for progress bar correct work
+        const wrapper = document.createElement('div');
+        wrapper.className = 'videos__item-wrapper';
+        div.appendChild(wrapper);
+        
         if (index === 0) setStateToActive(div);
         else if (index === 1) setStateToPreloading(div);
         else setStateToUnload(div);
@@ -167,13 +208,19 @@ async function setStateToActive(element) {
     const otherVideos = container.querySelectorAll(`.videos__item:not([data-index="${elementIndex}"]) video`);
     otherVideos.forEach(video => video.pause());
 
+    // Get wrapper element
+    const wrapper = element.querySelector('.videos__item-wrapper');
+    
     // Get or create a video
-    let video = element.querySelector('video');
-    if (!video) video = await loadVideoIntoContainer(element);
+    let video = wrapper.querySelector('video');
+    if (!video) video = await loadVideoIntoContainer(wrapper);
     
     // Play current video
-    await video.play().catch(e => console.log('Autoplay error:', e));
-    element.querySelector('.videos__item__state-indicator').classList.remove('-paused');
+    if (video) {
+        await video.play().catch(e => console.log('Autoplay error:', e));
+        const indicator = wrapper.querySelector('.videos__item__state-indicator');
+        if (indicator) indicator.classList.remove('-paused');
+    }
     
     return video;
 }
@@ -182,9 +229,12 @@ async function setStateToActive(element) {
 async function setStateToPreloading(element) {
     element.dataset.state = 'preloading';
 
+    // Get wrapper element
+    const wrapper = element.querySelector('.videos__item-wrapper');
+    
     // Get or create a video
-    let video = element.querySelector('video');
-    if (!video) video = await loadVideoIntoContainer(element);
+    let video = wrapper.querySelector('video');
+    if (!video) video = await loadVideoIntoContainer(wrapper);
     
     return video;
 }
@@ -193,8 +243,11 @@ async function setStateToPreloading(element) {
 function setStateToUnload(element) {
     element.dataset.state = 'unload';
 
+    // Get wrapper element
+    const wrapper = element.querySelector('.videos__item-wrapper');
+    
     // Get the video
-    let video = element.querySelector('video');
+    let video = wrapper.querySelector('video');
     if (video) video.remove();
 }
 

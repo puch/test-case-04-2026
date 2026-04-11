@@ -37,6 +37,19 @@ body {
         scroll-snap-align: start;
         scroll-snap-stop: always;
 
+        &-wrapper {
+            position: relative;
+        }
+
+        video {
+            height: 100vh;
+
+            @media all and (max-width: $breakpoint-mobile) {
+                width: 100vw;
+                object-fit: cover;
+            }
+        }
+
         &__state-indicator {
             position: absolute;
             top: 50%;
@@ -109,12 +122,22 @@ body {
             }
         }
 
-        video {
-            height: 100vh;
+        &__progress-bar {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: rgba($white, 0.3);
+            z-index: 20;
 
-            @media all and (max-width: $breakpoint-mobile) {
-                width: 100vw;
-                object-fit: cover;
+            &__fill {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                background-color: $red;
+                transition: width 0.3s linear;
             }
         }
     }
