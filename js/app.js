@@ -83,7 +83,7 @@ function toggleActiveItem(direction) {
 
 // Get video URL
 function getVideoUrl(index) {
-    return `videos/${index + 1}.mp4`;
+    return `videos/${index + 1}.MP4`;
 }
 
 
@@ -98,6 +98,7 @@ async function loadVideoIntoContainer(containerElement) {
     video.playsInline = true;
     video.preload = 'auto';
     video.muted = true;
+    video.poster = `videos/${index + 1}.webp`;
     
     const source = document.createElement('source');
     source.src = getVideoUrl(index);
