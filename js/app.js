@@ -86,7 +86,6 @@ function getVideoUrl(index) {
     return `videos/${index + 1}.MP4`;
 }
 
-
 // Load video to the existing container
 async function loadVideoIntoContainer(containerElement) {
     containerElement.innerHTML = '';
@@ -107,6 +106,28 @@ async function loadVideoIntoContainer(containerElement) {
     video.appendChild(source);
     containerElement.appendChild(video);
     
+    // Add state indicator
+    const indicator = document.createElement('div');
+    indicator.className = 'videos__item__state-indicator';
+    containerElement.appendChild(indicator);
+    
+    // Play/pause on click, and show the pause indicator
+    video.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        if (video.paused) {
+            video.play();
+            indicator.classList.remove('-paused');
+            void indicator.offsetWidth;// Cleanup previous animation
+            indicator.classList.add('-play');
+        } else {
+            video.pause();
+            indicator.classList.remove('-play');
+            void indicator.offsetWidth;// Cleanup previous animation
+            indicator.classList.add('-paused');
+        }
+    });
+    
     // If there is no video (error)
     video.addEventListener('error', async () => {
         console.warn(`Video ${index + 1} not exist`);
@@ -114,17 +135,6 @@ async function loadVideoIntoContainer(containerElement) {
         // End of the feed
         if (index === totalVideos - 1) {
             console.warn('This is the end of the feed.')
-        }
-    });
-    
-    // Play/pause on click
-    video.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        if (video.paused) {
-            video.play();
-        } else {
-            video.pause();
         }
     });
     
@@ -163,6 +173,7 @@ async function setStateToActive(element) {
     
     // Play current video
     await video.play().catch(e => console.log('Autoplay error:', e));
+    element.querySelector('.videos__item__state-indicator').classList.remove('-paused');
     
     return video;
 }
