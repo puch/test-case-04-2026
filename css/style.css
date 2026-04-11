@@ -91,6 +91,7 @@ body {
 .videos {
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
@@ -108,6 +109,7 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   font-size: 200px;
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -117,6 +119,7 @@ body {
 }
 .videos__item video {
   height: 100vh;
+  height: 100dvh;
 }
 @media all and (max-width: 767px) {
   .videos__item video {
@@ -132,7 +135,7 @@ body {
   width: 100px;
   height: 100px;
   margin: -50px 0 0 -50px;
-  background-color: rgba(34, 34, 34, 0.3);
+  background-color: rgba(34, 34, 34, 0.75);
   border-radius: 50%;
   visibility: hidden;
   opacity: 0;
@@ -197,7 +200,11 @@ body {
   left: 0;
   height: 5px;
   background-color: rgba(255, 255, 255, 0.3);
-  z-index: 20;
+  opacity: 0;
+  transition: 0.3s;
+}
+[data-state=active] .videos__item__progress-bar {
+  opacity: 1;
 }
 .videos__item__progress-bar__fill {
   position: absolute;

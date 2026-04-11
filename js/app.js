@@ -96,8 +96,6 @@ function updateProgressBar(video, progressFill) {
 
 // Load video to the existing container
 async function loadVideoIntoContainer(wrapperElement) {
-    wrapperElement.innerHTML = '';
-    
     const index = parseInt(wrapperElement.closest('.videos__item').dataset.index);
 
     // el → <video>
@@ -114,12 +112,10 @@ async function loadVideoIntoContainer(wrapperElement) {
     source.type = 'video/mp4';
     
     video.appendChild(source);
-    wrapperElement.appendChild(video);
     
     // Add state indicator el → <div class="video__item__state-indicator">
     const indicator = document.createElement('div');
     indicator.className = 'videos__item__state-indicator';
-    wrapperElement.appendChild(indicator);
     
     // Add progress bar el → <div class="videos__item__progress-bar">
     const progressBar = document.createElement('div');
@@ -127,6 +123,11 @@ async function loadVideoIntoContainer(wrapperElement) {
     const progressFill = document.createElement('div');
     progressFill.className = 'videos__item__progress-bar__fill';
     progressBar.appendChild(progressFill);
+    
+    // Clear wrapper and add all elements at once
+    wrapperElement.innerHTML = '';
+    wrapperElement.appendChild(video);
+    wrapperElement.appendChild(indicator);
     wrapperElement.appendChild(progressBar);
     
     // Update progress bar during video playback
@@ -234,7 +235,27 @@ async function setStateToPreloading(element) {
     
     // Get or create a video
     let video = wrapper.querySelector('video');
-    if (!video) video = await loadVideoIntoContainer(wrapper);
+    if (!video) {
+        video = await loadVideoIntoContainer(wrapper);
+        
+        // Start playing and immediately pause to preload content
+        // This helps to load the video without blinking
+        if (video && video.readyState < 3) {// If not enough data
+            try {
+                await video.play();
+
+                // Pause immediately
+                setTimeout(() => {
+                    if (video && !video.paused) {
+                        video.pause();
+                        video.currentTime = 0;// Reset to beginning
+                    }
+                }, 10);
+            } catch(e) {
+                console.warn('Preload play/pause error:', e);
+            }
+        }
+    }
     
     return video;
 }

@@ -15,6 +15,7 @@ body {
 .videos {
     width: 100vw;
     height: 100vh;
+    height: 100dvh;// For correct work with iOS Chrome
     overflow-y: scroll; 
     scroll-snap-type: y mandatory;
     scrollbar-width: none; // Firefox
@@ -33,6 +34,7 @@ body {
         position: relative;
         width: 100vw;
         height: 100vh;
+        height: 100dvh;
         font-size: 200px;
         scroll-snap-align: start;
         scroll-snap-stop: always;
@@ -43,6 +45,7 @@ body {
 
         video {
             height: 100vh;
+            height: 100dvh;
 
             @media all and (max-width: $breakpoint-mobile) {
                 width: 100vw;
@@ -57,7 +60,7 @@ body {
             width: 100px;
             height: 100px;
             margin: -50px 0 0 -50px;
-            background-color: rgba($dark, 0.3);
+            background-color: rgba($dark, 0.75);
             border-radius: 50%;
             visibility: hidden;
             opacity: 0;
@@ -129,7 +132,12 @@ body {
             left: 0;
             height: 5px;
             background-color: rgba($white, 0.3);
-            z-index: 20;
+            opacity: 0;
+            transition: $tr;
+
+            [data-state="active"] & {
+                opacity: 1;
+            }
 
             &__fill {
                 position: absolute;
