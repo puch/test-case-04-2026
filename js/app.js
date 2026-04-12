@@ -81,7 +81,58 @@ function toggleActiveItem(direction) {
     });
 }
 
-// 4. Assistive functions
+// 4. Control buttons
+// ******************************************************
+// Update buttons visibility
+async function updateButtonsVisibility() {
+    const upButton = document.querySelector('.control-button[data-direction="up"]');
+    const downButton = document.querySelector('.control-button[data-direction="down"]');
+    
+    // Check if first item on the screen
+    if (parseInt(container.querySelector('.videos__item[data-state="active"]').getAttribute('data-index')) === 0) {
+        upButton.classList.add('-hide');
+    } else {
+        upButton.classList.remove('-hide');
+    }
+    
+    // Check if last item on the screen
+    if (parseInt(container.querySelector('.videos__item[data-state="active"]').getAttribute('data-index')) === container.querySelectorAll('.videos__item').length - 1) {
+        downButton.classList.add('-hide');
+    } else {
+        downButton.classList.remove('-hide');
+    }
+}
+
+// Button events
+function controlButtons() {
+    const upButton = document.querySelector('.control-button[data-direction="up"]');
+    const downButton = document.querySelector('.control-button[data-direction="down"]');
+    const scrollHeight = container.clientHeight;
+    
+    upButton.addEventListener('click', () => {
+        container.scrollBy({
+            top: -scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    downButton.addEventListener('click', () => {
+        container.scrollBy({
+            top: scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Initial buttons visibility
+    updateButtonsVisibility();
+    
+    // Update buttons visibility on scroll
+    container.addEventListener('scroll', () => {
+        updateButtonsVisibility();
+    });
+}
+
+// 5. Assistive functions
 // ******************************************************
 
 // Get video URL
@@ -97,7 +148,36 @@ function updateProgressBar(video, progressFill) {
     }
 }
 
-// Setup horizontal drag to seek on progress bar
+// Create mute/unmute button
+function createMuteButton(video) {
+    const button = document.createElement('button');
+    button.className = 'videos__item__mute-button';
+    
+    // Set initial icon based on muted state
+    updateMuteButtonIcon(button, video.muted);
+    
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Toggle muted state
+        video.muted = !video.muted;
+        updateMuteButtonIcon(button, video.muted);
+    });
+    
+    // Update icon if muted changes from other sources
+    video.addEventListener('volumechange', () => {
+        updateMuteButtonIcon(button, video.muted);
+    });
+    
+    return button;
+}
+
+function updateMuteButtonIcon(button, isMuted) {
+    if (isMuted) button.classList.add('-muted');
+    else button.classList.remove('-muted');
+}
+
+// Setup horizontal drag to seek on progress bar only
 function setupDragToSeek(video, progressFill, progressBar) {
     let isDragging = false;
     let wasPlayingBeforeDrag = false;
@@ -230,11 +310,15 @@ async function loadVideoIntoContainer(wrapperElement) {
     progressFill.className = 'videos__item__progress-bar__fill';
     progressBar.appendChild(progressFill);
     
+    // Add mute button
+    const muteButton = createMuteButton(video);
+    
     // Clear wrapper and add all elements at once
     wrapperElement.innerHTML = '';
     wrapperElement.appendChild(video);
     wrapperElement.appendChild(indicator);
     wrapperElement.appendChild(progressBar);
+    wrapperElement.appendChild(muteButton);
     
     // Setup drag to seek on progress bar only
     setupDragToSeek(video, progressFill, progressBar);
@@ -384,7 +468,12 @@ function setStateToUnload(element) {
             dragState.get(video).cleanup();
             dragState.delete(video);
         }
-        video.remove();
+        
+        // Stop video playback
+        video.pause();
+        
+        // Remove src to unload video but keep poster
+        video.querySelector('source').removeAttribute('src');
     }
 }
 
@@ -409,10 +498,11 @@ async function prevVideo() {
     toggleActiveItem('up');
 }
 
-// 5. Initialization
+// 6. Initialization
 // ******************************************************
 async function init() {
     createInitialItems();
     observeActiveVideo();
+    controlButtons();
 }
 document.addEventListener('DOMContentLoaded', init);

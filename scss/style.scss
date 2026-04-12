@@ -58,6 +58,38 @@ body {
             }
         }
 
+        &__mute-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: 24px;
+            left: 19px;
+            width: 50px;
+            height: 50px;
+            border: none;
+            box-shadow: none;
+            cursor: pointer;
+            transition: $tr;
+            z-index: 20;
+
+            &::before {
+                display: block;
+                position: absolute;
+                content: ' ';
+                top: 50%;
+                left: 50%;
+                width: 22px;
+                height: 19px;
+                margin: -10px 0 0 -11px;
+                background: url(../images/sound-on.svg) center center no-repeat;
+            }
+
+            &.-muted::before {
+                background-image: url(../images/sound-off.svg);
+            }
+        }
+
         &__state-indicator {
             position: absolute;
             top: 50%;
@@ -214,6 +246,58 @@ body {
                     opacity: 1;
                 }
             }
+        }
+    }
+}
+
+.control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    font-size: 0;
+    background: $black;
+    border-radius: 50%;
+    transition: $tr;
+
+    &:hover {
+        background-color: lighten($black, 5);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+
+    @media all and (max-width: $breakpoint-tablet) {
+        display: none;
+    }
+
+    &.-hide {
+        display: none;
+    }
+
+    &::before {
+        display: block;
+        content: ' ';
+        width: 20px;
+        height: 25px;
+        background: url(../images/arrow.svg) center center no-repeat;
+        background-size: 20px 25px;
+    }
+
+    &[data-direction="up"] {
+        margin-top: -40px;
+    }
+
+    &[data-direction="down"] {
+        margin-top: 40px;
+
+        &::before {
+            transform: rotate(180deg);
         }
     }
 }

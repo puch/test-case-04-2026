@@ -134,6 +134,35 @@ body.-grabbing {
        object-fit: cover;
   }
 }
+.videos__item__mute-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 24px;
+  left: 19px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 20;
+}
+.videos__item__mute-button::before {
+  display: block;
+  position: absolute;
+  content: " ";
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 19px;
+  margin: -10px 0 0 -11px;
+  background: url(../images/sound-on.svg) center center no-repeat;
+}
+.videos__item__mute-button.-muted::before {
+  background-image: url(../images/sound-off.svg);
+}
 .videos__item__state-indicator {
   position: absolute;
   top: 50%;
@@ -268,4 +297,50 @@ body.-grabbing {
   .videos__item__progress-bar:hover .videos__item__progress-bar__fill::before {
     opacity: 1;
   }
+}
+
+.control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  font-size: 0;
+  background: #000;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.control-button:hover {
+  background-color: rgb(12.75, 12.75, 12.75);
+}
+.control-button:active {
+  transform: scale(0.9);
+}
+@media all and (max-width: 1279px) {
+  .control-button {
+    display: none;
+  }
+}
+.control-button.-hide {
+  display: none;
+}
+.control-button::before {
+  display: block;
+  content: " ";
+  width: 20px;
+  height: 25px;
+  background: url(../images/arrow.svg) center center no-repeat;
+  background-size: 20px 25px;
+}
+.control-button[data-direction=up] {
+  margin-top: -40px;
+}
+.control-button[data-direction=down] {
+  margin-top: 40px;
+}
+.control-button[data-direction=down]::before {
+  transform: rotate(180deg);
 }/*# sourceMappingURL=style.css.map */
