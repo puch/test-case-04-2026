@@ -259,7 +259,7 @@ body.-grabbing {
   bottom: 0;
   left: 0;
   height: 5px;
-  background-color: #b22;
+  background-color: #711;
   transition: 0.3s linear;
 }
 .videos__item__progress-bar__fill::before {
@@ -270,7 +270,7 @@ body.-grabbing {
   right: -5px;
   width: 20px;
   height: 20px;
-  background-color: #b22;
+  background-color: #711;
   border-radius: 50%;
   box-shadow: 0 0 7px rgba(34, 34, 34, 0.75);
   opacity: 0;

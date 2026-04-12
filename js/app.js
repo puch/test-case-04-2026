@@ -407,7 +407,14 @@ async function setStateToActive(element) {
     
     // Get or create a video
     let video = wrapper.querySelector('video');
+
     if (!video) video = await loadVideoIntoContainer(wrapper);
+    else {
+        // If video was unloaded, reload it
+        const source = video.querySelector('source');
+
+        if (!source || !source.src) video = await loadVideoIntoContainer(wrapper);
+    }
     
     // Play current video
     if (video) {
