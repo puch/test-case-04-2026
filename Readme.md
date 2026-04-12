@@ -44,52 +44,51 @@ Alternatively, you can run the project in Visual Studio Code:
 
 ## Project Structure
 
-├── index.html
-├── favicon.svg
-├── Readme.md
-│
-├── css/
-│   └── style.css          # Compiled styles
-│
-├── scss/
-│   ├── style.scss         # Main styles
-│   ├── _reset.scss        # CSS reset
-│   └── _variables.scss    # Variables & mixins
-│
-├── images/                # Icons
-│   ├── arrow.svg
-│   ├── pause.svg
-│   ├── play.svg
-│   ├── sound-off.svg
-│   └── sound-on.svg
-│
-├── videos/
-│   ├── 1.webp             # Video posters, generated used ffmpeg
-│   ├── 2.webp
-│   ├── 3.webp
-│   ├── 4.webp
-│   ├── 5.webp
-│   ├── 6.webp
-│   ├── 7.webp
-│   ├── 8.webp
-│   ├── 9.webp
-│   ├── 10.webp
-│   ├── 11.webp
-│   ├── 1.mp4
-│   ├── 1.webp
-│   ├── 2.mp4
-│   ├── 3.mp4
-│   ├── 4.mp4
-│   ├── 5.mp4
-│   ├── 6.mp4
-│   ├── 7.mp4
-│   ├── 8.mp4
-│   ├── 9.mp4
-│   ├── 10.mp4
-│   └── 11.mp4
-│
-└── js/
-    └── app.js
+- 📄 index.html
+- 📄 favicon.svg
+- 📄 Readme.md
+
+- 📁 css/
+    - `style.css` — Compiled styles
+
+- 📁 scss/
+    - `style.scss` — Main styles
+    - `_reset.scss` — CSS reset
+    - `_variables.scss` — Variables & mixins
+
+- 📁 images/ — Icons
+    - `arrow.svg`
+    - `pause.svg`
+    - `play.svg`
+    - `sound-off.svg`
+    - `sound-on.svg`
+
+- 📁 videos/
+    - `1.webp` - posters (generated using ffmpeg)
+    - `2.webp`
+    - `3.webp`
+    - `4.webp`
+    - `5.webp`
+    - `6.webp`
+    - `7.webp`
+    - `8.webp`
+    - `9.webp`
+    - `10.webp`
+    - `11.webp`
+    - `1.mp4` - video files
+    - `2.mp4`
+    - `3.mp4`
+    - `4.mp4`
+    - `5.mp4`
+    - `6.mp4`
+    - `7.mp4`
+    - `8.mp4`
+    - `9.mp4`
+    - `10.mp4`
+    - `11.mp4`
+
+- 📁 js/
+    - `app.js`
 
 ## Technologies Used
 
