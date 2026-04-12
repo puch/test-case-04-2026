@@ -1,5 +1,5 @@
 const container = document.querySelector('.videos');
-const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n => `videos/${n}.mp4`);
+const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(n => `videos/${n}.mp4`);
 
 // Store drag state for each video
 const dragState = new Map();
