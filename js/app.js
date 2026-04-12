@@ -148,6 +148,19 @@ function updateProgressBar(video, progressFill) {
     }
 }
 
+// Update video state indicator based on play/pause
+function updateVideoStateIndicator(video, indicator) {
+    if (video.paused) {
+        indicator.classList.remove('-play');
+        void indicator.offsetWidth; // Cleanup previous animation
+        indicator.classList.add('-paused');
+    } else {
+        indicator.classList.remove('-paused');
+        void indicator.offsetWidth; // Cleanup previous animation
+        indicator.classList.add('-play');
+    }
+}
+
 // Create mute/unmute button
 function createMuteButton(video) {
     const button = document.createElement('button');
@@ -161,11 +174,6 @@ function createMuteButton(video) {
         
         // Toggle muted state
         video.muted = !video.muted;
-        updateMuteButtonIcon(button, video.muted);
-    });
-    
-    // Update icon if muted changes from other sources
-    video.addEventListener('volumechange', () => {
         updateMuteButtonIcon(button, video.muted);
     });
     
@@ -346,15 +354,20 @@ async function loadVideoIntoContainer(wrapperElement) {
         
         if (video.paused) {
             video.play();
-            indicator.classList.remove('-paused');
-            void indicator.offsetWidth;// Cleanup previous animation
-            indicator.classList.add('-play');
+            updateVideoStateIndicator(video, indicator);
         } else {
             video.pause();
-            indicator.classList.remove('-play');
-            void indicator.offsetWidth;// Cleanup previous animation
-            indicator.classList.add('-paused');
+            updateVideoStateIndicator(video, indicator);
         }
+    });
+    
+    // Monitor play/pause state changes (from other sources like iOS Safe power mode)
+    video.addEventListener('play', () => {
+        updateVideoStateIndicator(video, indicator);
+    });
+    
+    video.addEventListener('pause', () => {
+        updateVideoStateIndicator(video, indicator);
     });
     
     // If there is no video (error)
@@ -420,7 +433,7 @@ async function setStateToActive(element) {
     if (video) {
         await video.play().catch(e => console.log('Autoplay error:', e));
         const indicator = wrapper.querySelector('.videos__item__state-indicator');
-        if (indicator) indicator.classList.remove('-paused');
+        if (indicator) updateVideoStateIndicator(video, indicator);
     }
     
     return video;
@@ -449,6 +462,8 @@ async function setStateToPreloading(element) {
                     if (video && !video.paused) {
                         video.pause();
                         video.currentTime = 0;// Reset to beginning
+                        const indicator = wrapper.querySelector('.videos__item__state-indicator');
+                        if (indicator) updateVideoStateIndicator(video, indicator);
                     }
                 }, 10);
             } catch(e) {

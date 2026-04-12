@@ -20,6 +20,7 @@ v.puchkin@bk.ru
 8. Video loading via API is not supported; the application works with a predefined set of videos.
 9. Infinite scroll is not implemented.
 10. The interface is designed by me and reflects my subjective vision.
+11. Possible improvements: improve progress bar accuracy, add notification when video is paused due to low power mode on iOS/macOS.
 
 ## Desktop Version Features
 
