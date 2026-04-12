@@ -58,6 +58,36 @@ body {
             }
         }
 
+        &__mute-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            width: 90px;
+            height: 70px;
+            border: none;
+            box-shadow: none;
+            cursor: pointer;
+            transition: $tr;
+            z-index: 20;
+
+            &::before {
+                display: block;
+                position: absolute;
+                content: ' ';
+                left: 40px;
+                width: 22px;
+                height: 19px;
+                background: url(../images/sound-on.svg) center center no-repeat;
+            }
+
+            &.-muted::before {
+                background-image: url(../images/sound-off.svg);
+            }
+        }
+
         &__state-indicator {
             position: absolute;
             top: 50%;
@@ -232,14 +262,14 @@ body {
     width: 70px;
     height: 70px;
     font-size: 0;
-    background: transparent;
+    background: $black;
     border-radius: 50%;
     visibility: hidden;
     opacity: 0;
     transition: $tr;
 
     &:hover {
-        background-color: $black;
+        background-color: lighten($black, 5);
     }
 
     &:active {
@@ -274,66 +304,5 @@ body {
         &::before {
             transform: rotate(180deg);
         }
-    }
-}
-
-.mute-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    bottom: 24px;
-    left: 20px;
-    width: 70px;
-    height: 70px;
-    font-size: 0;
-    border: none;
-    border-radius: 50%;
-    box-shadow: none;
-    cursor: pointer;
-    transition: $tr;
-
-    &:hover {
-        background-color: $black;
-    }
-
-    &:active {
-        transform: scale(0.9);
-    }
-
-    @media all and (max-width: $breakpoint-tablet) {
-        bottom: 24px;
-        left: 0;
-        width: 90px;
-        height: 70px;
-        border-radius: unset;
-
-        &:hover {
-            background-color: transparent;
-        }
-
-        &:active {
-            transform: unset;
-        }
-    }
-
-    &::before {
-        display: block;
-        position: absolute;
-        content: ' ';
-        left: 50%;
-        width: 22px;
-        height: 19px;
-        margin-left: -11px;
-        background: url(../images/sound-on.svg) center center no-repeat;
-
-        @media all and (max-width: $breakpoint-tablet) {
-            left: 40px;
-            margin-left: unset;
-        }
-    }
-
-    &.-muted::before {
-        background-image: url(../images/sound-off.svg);
     }
 }

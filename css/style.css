@@ -136,6 +136,33 @@ body.-grabbing {
        object-fit: cover;
   }
 }
+.videos__item__mute-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  width: 90px;
+  height: 70px;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 20;
+}
+.videos__item__mute-button::before {
+  display: block;
+  position: absolute;
+  content: " ";
+  left: 40px;
+  width: 22px;
+  height: 19px;
+  background: url(../images/sound-on.svg) center center no-repeat;
+}
+.videos__item__mute-button.-muted::before {
+  background-image: url(../images/sound-off.svg);
+}
 .videos__item__state-indicator {
   position: absolute;
   top: 50%;
@@ -285,14 +312,14 @@ body.-grabbing {
   width: 70px;
   height: 70px;
   font-size: 0;
-  background: transparent;
+  background: #000;
   border-radius: 50%;
   visibility: hidden;
   opacity: 0;
   transition: 0.3s;
 }
 .control-button:hover {
-  background-color: #000;
+  background-color: rgb(12.75, 12.75, 12.75);
 }
 .control-button:active {
   transform: scale(0.9);
@@ -322,61 +349,4 @@ body.-grabbing {
 }
 .control-button[data-direction=down]::before {
   transform: rotate(180deg);
-}
-
-.mute-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  bottom: 24px;
-  left: 20px;
-  width: 70px;
-  height: 70px;
-  font-size: 0;
-  border: none;
-  border-radius: 50%;
-  box-shadow: none;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.mute-button:hover {
-  background-color: #000;
-}
-.mute-button:active {
-  transform: scale(0.9);
-}
-@media all and (max-width: 1279px) {
-  .mute-button {
-    bottom: 24px;
-    left: 0;
-    width: 90px;
-    height: 70px;
-    border-radius: unset;
-  }
-  .mute-button:hover {
-    background-color: transparent;
-  }
-  .mute-button:active {
-    transform: unset;
-  }
-}
-.mute-button::before {
-  display: block;
-  position: absolute;
-  content: " ";
-  left: 50%;
-  width: 22px;
-  height: 19px;
-  margin-left: -11px;
-  background: url(../images/sound-on.svg) center center no-repeat;
-}
-@media all and (max-width: 1279px) {
-  .mute-button::before {
-    left: 40px;
-    margin-left: unset;
-  }
-}
-.mute-button.-muted::before {
-  background-image: url(../images/sound-off.svg);
 }/*# sourceMappingURL=style.css.map */

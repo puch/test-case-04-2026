@@ -14,7 +14,7 @@ v.puchkin@bk.ru
 2. Video scrolling is implemented using native scroll and the CSS `scroll-snap-type` property, which greatly simplifies scroll handling.
 3. Videos at positions -2 and beyond, and +2 and beyond from the active video are unloaded (only the poster remains).
 4. Videos at positions -1 and +1 are preloaded.
-5. The mute/unmute button works globally for all videos at once.
+5. The mute/unmute button works for each individual video. In one of the commits (`c5bdd05`), I implemented a solution where it worked globally for all videos, but there is an issue with this approach: on iOS browsers, the video is forcibly paused if its sound is programmatically turned on. This is iOS policy. Therefore, it was decided to implement sound control separately for each video.
 6. The progress bar is draggable.
 7. Videos can be paused and unpaused. Each video resumes playback from the position it was paused at when you return to it.
 8. Video loading via API is not supported; the application works with a predefined set of videos.
