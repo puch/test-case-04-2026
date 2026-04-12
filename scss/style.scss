@@ -10,6 +10,11 @@ body {
 
 body {
     background-color: $dark;
+
+    &.-grabbing {
+        user-select: none;
+        cursor: grabbing;
+    }
 }
 
 .videos {
@@ -130,22 +135,84 @@ body {
             right: 0;
             bottom: 0;
             left: 0;
-            height: 5px;
-            background-color: rgba($white, 0.3);
+            height: 24px;
             opacity: 0;
-            transition: $tr;
+            cursor: grab;
 
             [data-state="active"] & {
                 opacity: 1;
             }
 
+            &::before {
+                display: block;
+                position: absolute;
+                content: ' ';
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 5px;
+                background-color: rgba($white, 0.3);
+                transition: 0.3s linear;
+
+                .-grabbing & {
+                    height: 10px;
+                }
+            }
+
             &__fill {
                 position: absolute;
-                left: 0;
-                top: 0;
                 bottom: 0;
+                left: 0;
+                height: 5px;
                 background-color: $red;
-                transition: width 0.3s linear;
+                transition: 0.3s linear;
+
+                &::before {
+                    display: block;
+                    position: absolute;
+                    content: ' ';
+                    top: -5px;
+                    right: -5px;
+                    width: 20px;
+                    height: 20px;
+                    background-color: $red;
+                    border-radius: 50%;
+                    box-shadow: 0 0 7px rgba($dark, 0.75);
+                    opacity: 0;
+                }
+
+                .-grabbing & {
+                    height: 10px;
+                    background-color: $red-accent;
+                    transition: height 0.3s linear;
+
+                    &::before {
+                        background-color: $red-accent;
+                        opacity: 1;
+                    }
+                }
+            }
+
+            @media all and (min-width: $breakpoint-desktop) {
+                &:hover {
+                    &::before,
+                    &__fill {
+                        height: 10px;
+                    }
+
+                    &__fill::before {
+                        opacity: 1;
+                    }
+                }
+
+                &:hover::before,
+                &:hover .videos__item__progress-bar__fill {
+                    height: 10px;
+                }
+
+                &:hover .videos__item__progress-bar__fill::before {
+                    opacity: 1;
+                }
             }
         }
     }

@@ -1,6 +1,9 @@
 const container = document.querySelector('.videos');
 const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n => `videos/${n}.mp4`);
 
+// Store drag state for each video
+const dragState = new Map();
+
 // 1. Create all initial items
 // ******************************************************
 function createInitialItems() {
@@ -94,6 +97,109 @@ function updateProgressBar(video, progressFill) {
     }
 }
 
+// Setup horizontal drag to seek on progress bar
+function setupDragToSeek(video, progressFill, progressBar) {
+    let isDragging = false;
+    let wasPlayingBeforeDrag = false;
+    let currentProgressFill = progressFill;
+    
+    const getSeekTimeFromEvent = (e) => {
+        const rect = progressBar.getBoundingClientRect();
+        let clientX;
+        
+        if (e.type === 'mousemove' || e.type === 'mousedown') {
+            clientX = e.clientX;
+        } else if (e.type === 'touchmove' || e.type === 'touchstart') {
+            clientX = e.touches[0].clientX;
+        }
+        
+        let x = clientX - rect.left;
+        x = Math.max(0, Math.min(x, rect.width));
+        const percent = x / rect.width;
+        const seekTime = percent * video.duration;
+        
+        return seekTime;
+    };
+    
+    const onDragStart = (e) => {
+        if (!video.duration || isNaN(video.duration)) return;
+        
+        isDragging = true;
+        
+        // Remember if video was playing
+        wasPlayingBeforeDrag = !video.paused;
+        
+        // Pause video during drag to show current frame
+        if (wasPlayingBeforeDrag) {
+            video.pause();
+        }
+        
+        // Seek to clicked position
+        const seekTime = getSeekTimeFromEvent(e);
+        video.currentTime = seekTime;
+        
+        // Update progress bar
+        const percent = (seekTime / video.duration) * 100;
+        currentProgressFill.style.width = `${percent}%`;
+        
+        // Add temporary styles
+        document.body.classList.add('-grabbing');
+        
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    
+    const onDragMove = (e) => {
+        if (!isDragging) return;
+        
+        // Calculate new time based on cursor position
+        const seekTime = getSeekTimeFromEvent(e);
+        video.currentTime = seekTime;
+        
+        // Update progress bar
+        const percent = (seekTime / video.duration) * 100;
+        currentProgressFill.style.width = `${percent}%`;
+        
+        e.preventDefault();
+    };
+    
+    const onDragEnd = () => {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        
+        // Resume playback if it was playing before drag
+        if (wasPlayingBeforeDrag) {
+            video.play().catch(e => console.log('Play after drag error:', e));
+        }
+        
+        // Reset styles
+        document.body.classList.remove('-grabbing');
+    };
+    
+    // Mouse events on progress bar only
+    progressBar.addEventListener('mousedown', onDragStart);
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('mouseup', onDragEnd);
+    
+    // Touch events for mobile on progress bar only
+    progressBar.addEventListener('touchstart', onDragStart, { passive: false });
+    window.addEventListener('touchmove', onDragMove, { passive: false });
+    window.addEventListener('touchend', onDragEnd);
+    
+    // Store cleanup function
+    dragState.set(video, {
+        cleanup: () => {
+            progressBar.removeEventListener('mousedown', onDragStart);
+            window.removeEventListener('mousemove', onDragMove);
+            window.removeEventListener('mouseup', onDragEnd);
+            progressBar.removeEventListener('touchstart', onDragStart);
+            window.removeEventListener('touchmove', onDragMove);
+            window.removeEventListener('touchend', onDragEnd);
+        }
+    });
+}
+
 // Load video to the existing container
 async function loadVideoIntoContainer(wrapperElement) {
     const index = parseInt(wrapperElement.closest('.videos__item').dataset.index);
@@ -129,6 +235,9 @@ async function loadVideoIntoContainer(wrapperElement) {
     wrapperElement.appendChild(video);
     wrapperElement.appendChild(indicator);
     wrapperElement.appendChild(progressBar);
+    
+    // Setup drag to seek on progress bar only
+    setupDragToSeek(video, progressFill, progressBar);
     
     // Update progress bar during video playback
     video.addEventListener('timeupdate', () => {
@@ -269,7 +378,14 @@ function setStateToUnload(element) {
     
     // Get the video
     let video = wrapper.querySelector('video');
-    if (video) video.remove();
+    if (video) {
+        // Cleanup drag state
+        if (dragState.has(video)) {
+            dragState.get(video).cleanup();
+            dragState.delete(video);
+        }
+        video.remove();
+    }
 }
 
 // Get active item or item index

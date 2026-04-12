@@ -87,6 +87,12 @@ body {
 body {
   background-color: #222;
 }
+body.-grabbing {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: grabbing;
+}
 
 .videos {
   width: 100vw;
@@ -198,19 +204,68 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 5px;
-  background-color: rgba(255, 255, 255, 0.3);
+  height: 24px;
   opacity: 0;
-  transition: 0.3s;
+  cursor: grab;
 }
 [data-state=active] .videos__item__progress-bar {
   opacity: 1;
 }
+.videos__item__progress-bar::before {
+  display: block;
+  position: absolute;
+  content: " ";
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: 0.3s linear;
+}
+.-grabbing .videos__item__progress-bar::before {
+  height: 10px;
+}
 .videos__item__progress-bar__fill {
   position: absolute;
-  left: 0;
-  top: 0;
   bottom: 0;
+  left: 0;
+  height: 5px;
+  background-color: #b22;
+  transition: 0.3s linear;
+}
+.videos__item__progress-bar__fill::before {
+  display: block;
+  position: absolute;
+  content: " ";
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background-color: #b22;
+  border-radius: 50%;
+  box-shadow: 0 0 7px rgba(34, 34, 34, 0.75);
+  opacity: 0;
+}
+.-grabbing .videos__item__progress-bar__fill {
+  height: 10px;
   background-color: #f00;
-  transition: width 0.3s linear;
+  transition: height 0.3s linear;
+}
+.-grabbing .videos__item__progress-bar__fill::before {
+  background-color: #f00;
+  opacity: 1;
+}
+@media all and (min-width: 1280px) {
+  .videos__item__progress-bar:hover::before, .videos__item__progress-bar:hover__fill {
+    height: 10px;
+  }
+  .videos__item__progress-bar:hover__fill::before {
+    opacity: 1;
+  }
+  .videos__item__progress-bar:hover::before, .videos__item__progress-bar:hover .videos__item__progress-bar__fill {
+    height: 10px;
+  }
+  .videos__item__progress-bar:hover .videos__item__progress-bar__fill::before {
+    opacity: 1;
+  }
 }/*# sourceMappingURL=style.css.map */
