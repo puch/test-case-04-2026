@@ -169,9 +169,7 @@ function createMuteButton(video) {
     // Set initial icon based on muted state
     updateMuteButtonIcon(button, video.muted);
     
-    button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        
+    button.addEventListener('click', () => {
         // Toggle muted state
         video.muted = !video.muted;
         updateMuteButtonIcon(button, video.muted);
@@ -420,14 +418,7 @@ async function setStateToActive(element) {
     
     // Get or create a video
     let video = wrapper.querySelector('video');
-
     if (!video) video = await loadVideoIntoContainer(wrapper);
-    else {
-        // If video was unloaded, reload it
-        const source = video.querySelector('source');
-
-        if (!source || !source.src) video = await loadVideoIntoContainer(wrapper);
-    }
     
     // Play current video
     if (video) {
@@ -495,7 +486,7 @@ function setStateToUnload(element) {
         video.pause();
         
         // Remove src to unload video but keep poster
-        video.querySelector('source').removeAttribute('src');
+        video.remove();
     }
 }
 
