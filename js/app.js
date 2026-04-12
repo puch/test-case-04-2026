@@ -90,16 +90,16 @@ async function updateButtonsVisibility() {
     
     // Check if first item on the screen
     if (parseInt(container.querySelector('.videos__item[data-state="active"]').getAttribute('data-index')) === 0) {
-        upButton.classList.add('-hide');
+        upButton.classList.remove('-show');
     } else {
-        upButton.classList.remove('-hide');
+        upButton.classList.add('-show');
     }
     
     // Check if last item on the screen
     if (parseInt(container.querySelector('.videos__item[data-state="active"]').getAttribute('data-index')) === container.querySelectorAll('.videos__item').length - 1) {
-        downButton.classList.add('-hide');
+        downButton.classList.remove('-show');
     } else {
-        downButton.classList.remove('-hide');
+        downButton.classList.add('-show');
     }
 }
 

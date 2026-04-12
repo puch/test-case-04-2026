@@ -45,6 +45,8 @@ button, input, select, textarea {
 
 button {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 table {

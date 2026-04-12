@@ -64,9 +64,9 @@ body {
             justify-content: center;
             position: absolute;
             bottom: 24px;
-            left: 19px;
-            width: 50px;
-            height: 50px;
+            left: 0;
+            width: 90px;
+            height: 70px;
             border: none;
             box-shadow: none;
             cursor: pointer;
@@ -77,11 +77,9 @@ body {
                 display: block;
                 position: absolute;
                 content: ' ';
-                top: 50%;
-                left: 50%;
+                left: 40px;
                 width: 22px;
                 height: 19px;
-                margin: -10px 0 0 -11px;
                 background: url(../images/sound-on.svg) center center no-repeat;
             }
 
@@ -223,6 +221,10 @@ body {
                         opacity: 1;
                     }
                 }
+
+                &.-no-animation {
+                    transition: unset;
+                }
             }
 
             @media all and (min-width: $breakpoint-desktop) {
@@ -262,6 +264,8 @@ body {
     font-size: 0;
     background: $black;
     border-radius: 50%;
+    visibility: hidden;
+    opacity: 0;
     transition: $tr;
 
     &:hover {
@@ -276,8 +280,9 @@ body {
         display: none;
     }
 
-    &.-hide {
-        display: none;
+    &.-show {
+        visibility: visible;
+        opacity: 1;
     }
 
     &::before {

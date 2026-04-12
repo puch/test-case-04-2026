@@ -45,6 +45,8 @@ button, input, select, textarea {
 
 button {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 table {
@@ -140,9 +142,9 @@ body.-grabbing {
   justify-content: center;
   position: absolute;
   bottom: 24px;
-  left: 19px;
-  width: 50px;
-  height: 50px;
+  left: 0;
+  width: 90px;
+  height: 70px;
   border: none;
   box-shadow: none;
   cursor: pointer;
@@ -153,11 +155,9 @@ body.-grabbing {
   display: block;
   position: absolute;
   content: " ";
-  top: 50%;
-  left: 50%;
+  left: 40px;
   width: 22px;
   height: 19px;
-  margin: -10px 0 0 -11px;
   background: url(../images/sound-on.svg) center center no-repeat;
 }
 .videos__item__mute-button.-muted::before {
@@ -284,6 +284,9 @@ body.-grabbing {
   background-color: #f00;
   opacity: 1;
 }
+.videos__item__progress-bar__fill.-no-animation {
+  transition: unset;
+}
 @media all and (min-width: 1280px) {
   .videos__item__progress-bar:hover::before, .videos__item__progress-bar:hover__fill {
     height: 10px;
@@ -311,6 +314,8 @@ body.-grabbing {
   font-size: 0;
   background: #000;
   border-radius: 50%;
+  visibility: hidden;
+  opacity: 0;
   transition: 0.3s;
 }
 .control-button:hover {
@@ -324,8 +329,9 @@ body.-grabbing {
     display: none;
   }
 }
-.control-button.-hide {
-  display: none;
+.control-button.-show {
+  visibility: visible;
+  opacity: 1;
 }
 .control-button::before {
   display: block;
