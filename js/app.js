@@ -1,9 +1,6 @@
 const container = document.querySelector('.videos');
 const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n => `videos/${n}.mp4`);
 
-// Store drag state for each video
-const dragState = new Map();
-
 // 1. Create all initial items
 // ******************************************************
 function createInitialItems() {
@@ -83,7 +80,7 @@ function toggleActiveItem(direction) {
 
 // 4. Control buttons
 // ******************************************************
-// Update buttons visibility
+// Update buttons visibility (up/down)
 async function updateButtonsVisibility() {
     const upButton = document.querySelector('.control-button[data-direction="up"]');
     const downButton = document.querySelector('.control-button[data-direction="down"]');
@@ -103,7 +100,7 @@ async function updateButtonsVisibility() {
     }
 }
 
-// Button events
+// Button events (up/down)
 function controlButtons() {
     const upButton = document.querySelector('.control-button[data-direction="up"]');
     const downButton = document.querySelector('.control-button[data-direction="down"]');
@@ -132,6 +129,46 @@ function controlButtons() {
     });
 }
 
+// Mute state
+let isMuted = true;
+
+// Update all videos mute state
+function updateAllVideosMuteState() {
+    const allVideos = container.querySelectorAll('video');
+    allVideos.forEach(video => {
+        video.muted = isMuted;
+    });
+}
+
+// Toggle global mute
+function toggleGlobalMute() {
+    isMuted = !isMuted;
+    updateAllVideosMuteState();
+    updateMuteButton();
+}
+
+// Handle mute button
+function muteButton() {
+    const button = document.querySelector('.mute-button');
+    
+    updateMuteButton();
+    
+    button.addEventListener('click', () => {
+        toggleGlobalMute();
+    });
+}
+
+// Update mute button icon
+function updateMuteButton() {
+    const button = document.querySelector('.mute-button');
+    
+    if (isMuted) {
+        button.classList.add('-muted');
+    } else {
+        button.classList.remove('-muted');
+    }
+}
+
 // 5. Assistive functions
 // ******************************************************
 
@@ -148,36 +185,9 @@ function updateProgressBar(video, progressFill) {
     }
 }
 
-// Create mute/unmute button
-function createMuteButton(video) {
-    const button = document.createElement('button');
-    button.className = 'videos__item__mute-button';
-    
-    // Set initial icon based on muted state
-    updateMuteButtonIcon(button, video.muted);
-    
-    button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        
-        // Toggle muted state
-        video.muted = !video.muted;
-        updateMuteButtonIcon(button, video.muted);
-    });
-    
-    // Update icon if muted changes from other sources
-    video.addEventListener('volumechange', () => {
-        updateMuteButtonIcon(button, video.muted);
-    });
-    
-    return button;
-}
-
-function updateMuteButtonIcon(button, isMuted) {
-    if (isMuted) button.classList.add('-muted');
-    else button.classList.remove('-muted');
-}
-
 // Setup horizontal drag to seek on progress bar only
+const dragState = new Map();
+
 function setupDragToSeek(video, progressFill, progressBar) {
     let isDragging = false;
     let wasPlayingBeforeDrag = false;
@@ -289,7 +299,7 @@ async function loadVideoIntoContainer(wrapperElement) {
     video.loop = true;
     video.playsInline = true;
     video.preload = 'auto';
-    video.muted = true;
+    video.muted = isMuted;
     video.poster = `videos/${index + 1}.webp`;
     
     // el → <video> → <source>
@@ -310,15 +320,11 @@ async function loadVideoIntoContainer(wrapperElement) {
     progressFill.className = 'videos__item__progress-bar__fill';
     progressBar.appendChild(progressFill);
     
-    // Add mute button
-    const muteButton = createMuteButton(video);
-    
     // Clear wrapper and add all elements at once
     wrapperElement.innerHTML = '';
     wrapperElement.appendChild(video);
     wrapperElement.appendChild(indicator);
     wrapperElement.appendChild(progressBar);
-    wrapperElement.appendChild(muteButton);
     
     // Setup drag to seek on progress bar only
     setupDragToSeek(video, progressFill, progressBar);
@@ -504,5 +510,6 @@ async function init() {
     createInitialItems();
     observeActiveVideo();
     controlButtons();
+    muteButton();
 }
 document.addEventListener('DOMContentLoaded', init);
