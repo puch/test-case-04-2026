@@ -76,6 +76,8 @@ Alternatively, you can run the project in Visual Studio Code:
     - `9.webp`
     - `10.webp`
     - `11.webp`
+    - `12.webp`
+    - `13.webp`
     - `1.mp4` - video files
     - `2.mp4`
     - `3.mp4`
@@ -87,6 +89,8 @@ Alternatively, you can run the project in Visual Studio Code:
     - `9.mp4`
     - `10.mp4`
     - `11.mp4`
+    - `12.mp4`
+    - `13.mp4`
 
 - 📁 js/
     - `app.js`
